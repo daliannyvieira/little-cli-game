@@ -55,6 +55,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       return 'Something went wrong :(';
     } else {
       (function () {
+
+        // TODO: ADD ES6 Transpilation Support
+        var dataArray = [].concat(_toConsumableArray(Object.values(data)));
+        var activeEntry = [];
+        var currentPattern = '';
+        var altCurrentPattern = '';
+        var currentCmdName = '';
+
         var nextEntry = function nextEntry() {
           var randomItem = dataArray[randomizeValue(data)];
           $gameDef.innerHTML = randomItem.desc;
@@ -66,6 +74,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           activeEntry = [];
         };
 
+        nextEntry();
+
         // for every keydown, check to see if the answer is complete yet, or if ctrl+c was clicked to skip it
 
         var newGameItem = function newGameItem() {
@@ -74,6 +84,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         };
 
         var checkKey = function checkKey(e) {
+          if (finished) return;
           e = e || window.event;
           activeEntry.push(e.keyCode);
           $gameEntry.innerHTML += e.key;
@@ -104,16 +115,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         };
 
         // init keydown function
-
-
-        // TODO: ADD ES6 Transpilation Support
-        var dataArray = [].concat(_toConsumableArray(Object.values(data)));
-        var activeEntry = [];
-        var currentPattern = '';
-        var altCurrentPattern = '';
-        var currentCmdName = '';
-
-        nextEntry();document.onkeydown = checkKey;
+        document.onkeydown = checkKey;
       })();
     }
   });
@@ -121,6 +123,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   // Start Game and counter
 
   var started = false;
+  var finished = false;
 
   window.onkeydown = function () {
     if (!started) {
@@ -135,6 +138,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         countdownTimer = setInterval(function () {
           counter--;
           if (counter <= 0) {
+            finished = true;
             document.body.classList += 'game-over';
             window.clearInterval(countdownTimer);
 
