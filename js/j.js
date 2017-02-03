@@ -55,6 +55,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       return 'Something went wrong :(';
     } else {
       (function () {
+
+        // TODO: ADD ES6 Transpilation Support
+        var dataArray = [].concat(_toConsumableArray(Object.values(data)));
+        var activeEntry = [];
+        var currentPattern = '';
+        var altCurrentPattern = '';
+        var currentCmdName = '';
+
         var nextEntry = function nextEntry() {
           var randomItem = dataArray[randomizeValue(data)];
           $gameDef.innerHTML = randomItem.desc;
@@ -65,6 +73,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           altCurrentPattern = randomItem.altBinding ? randomItem.altBinding.join() : '';
           activeEntry = [];
         };
+
+        nextEntry();
 
         // for every keydown, check to see if the answer is complete yet, or if ctrl+c was clicked to skip it
 
@@ -105,16 +115,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         };
 
         // init keydown function
-
-
-        // TODO: ADD ES6 Transpilation Support
-        var dataArray = [].concat(_toConsumableArray(Object.values(data)));
-        var activeEntry = [];
-        var currentPattern = '';
-        var altCurrentPattern = '';
-        var currentCmdName = '';
-
-        nextEntry();document.onkeydown = checkKey;
+        document.onkeydown = checkKey;
       })();
     }
   });
